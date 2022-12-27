@@ -1,0 +1,12 @@
+{
+	"C_Cpp.dimInactiveRegions": true,
+	"files.associations": {
+		"minitalk.h": "c",
+		"signal.h": "c",
+		"stdio.h": "c",
+		"ft_printf.h": "c",
+		"unistd.h": "c",
+		"stdarg.h": "c",
+		"stdlib.h": "c"
+	}
+}
