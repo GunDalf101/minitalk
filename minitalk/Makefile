@@ -1,24 +1,34 @@
-NAME = Minitalk
-CLIENT = client
-SERVER = server
 
-SRCC = client.c
-SRCS =    server.c
+SOURCES = server.c client.c
+OBJECTS = $(SOURCES:.c=.o)
+INCLUDES = minitalk.h
 
-    
-#INC        =    ./inc/minitalk.h
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror
 
-CC            =    gcc
-CFLAG        =    -Wall -Wextra -Werror
-RM            =    rm -f
+all: server client
 
+bonus: server client
 
+server: server.o ft_printf
+	$(CC) -o $@ $< ft_printf/ft_printf.a
 
-all:$(CLIENT) $(SERVER)
+client: client.o ft_printf
+	$(CC) -o $@ $< ft_printf/ft_printf.a
 
-$(SERVER): $(SRCS)
-    $(CC) $(CFLAGS) $(SRCS) -o $<
-    
+%.o: %.c
+	$(CC) -c $(CFLAGS) $?
 
-$(CLIENT): $(SRCC)
-    $(CC) $(CFLAGS) $(SRCC) -o $<
+ft_printf:
+	make -C ft_printf
+
+clean:
+	rm -f $(OBJECTS)
+	make -C ft_printf clean
+	
+fclean: clean
+	rm -f server client ft_printf/ft_printf.a
+
+re: fclean all
+
+.PHONY: all bonus ft_printf clean fclean re
