@@ -6,7 +6,7 @@
 /*   By: mbennani <mbennani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 11:37:46 by mbennani          #+#    #+#             */
-/*   Updated: 2022/12/28 02:24:55 by mbennani         ###   ########.fr       */
+/*   Updated: 2023/01/20 11:52:54 by mbennani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,15 @@ void	fortsignal(int sig, siginfo_t *info)
 	exit (0);
 }
 
+void	nothin(void)
+{
+	ft_printf("\nNOPE\n");
+}
+
 void	send_char(char c, int pid)
 {
 	int	j;
+	int	i;
 
 	j = 0;
 	while (j < 8)
@@ -30,6 +36,13 @@ void	send_char(char c, int pid)
 			kill(pid, SIGUSR1);
 		else
 			kill(pid, SIGUSR2);
+		i = 0;
+		while (i < 32)
+		{
+			if (i != SIGUSR1 && i != SIGUSR2)
+				signal(i, nothin);
+			i++;
+		}
 		usleep(300);
 		c >>= 1;
 		j++;
