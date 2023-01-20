@@ -6,7 +6,7 @@
 /*   By: mbennani <mbennani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 11:31:19 by mbennani          #+#    #+#             */
-/*   Updated: 2022/12/27 21:09:43 by mbennani         ###   ########.fr       */
+/*   Updated: 2022/12/28 02:33:07 by mbennani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ int	flag_getter(const char *format)
 		return (9);
 	return (0);
 }
-
 
 static int	isoverflow(long long int prev, long long int curr)
 {

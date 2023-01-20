@@ -16,8 +16,8 @@ server: server.o ft_printf
 client: client.o ft_printf
 	$(CC) -o $@ $< ft_printf/ft_printf.a
 
-%.o: %.c
-	$(CC) -c $(CFLAGS) $?
+%.o: %.c minitalk.h
+	$(CC) -c $(CFLAGS) $<
 
 ft_printf:
 	make -C ft_printf
