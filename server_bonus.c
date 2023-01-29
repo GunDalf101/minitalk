@@ -1,16 +1,55 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.c                                           :+:      :+:    :+:   */
+/*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbennani <mbennani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/21 11:37:41 by mbennani          #+#    #+#             */
-/*   Updated: 2022/12/28 03:36:21 by mbennani         ###   ########.fr       */
+/*   Created: 2023/01/26 14:18:48 by mbennani          #+#    #+#             */
+/*   Updated: 2023/01/29 20:25:22 by mbennani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
+
+int			g_unisize;
+
+int	unitoomuch(unsigned char c)
+{
+	if ((c >> 4) == 0b1100)
+		return (2);
+	else if ((c >> 4) == 0b1110)
+		return (3);
+	else if ((c >> 4) == 0b1111)
+		return (4);
+	return (1);
+}
+
+void	ultrauni(int pid, unsigned char c)
+{
+	static unsigned int	cpp;
+	static int			i;
+	static int			client;
+
+	if (client != pid)
+	{
+		client = pid;
+		write(1, "\n", 1);
+		g_unisize = 0;
+		cpp = 0;
+		i = 0;
+	}
+	if (g_unisize == 0)
+		g_unisize = unitoomuch(c);
+	cpp |= (c << i++ *8);
+	if (g_unisize == i)
+	{
+		write(STDOUT_FILENO, &cpp, g_unisize);
+		g_unisize = 0;
+		cpp = 0;
+		i = 0;
+	}
+}
 
 void	writesig(int c, int client)
 {
@@ -24,9 +63,9 @@ void	writesig(int c, int client)
 
 void	handler(int sig, siginfo_t	*info)
 {
-	static int	client;
-	static int	d;
-	static char	c;
+	static int				client;
+	static int				d;
+	static unsigned char	c;
 
 	if (client != info->si_pid)
 	{
@@ -42,7 +81,10 @@ void	handler(int sig, siginfo_t	*info)
 	d++;
 	if (d == 8)
 	{
-		writesig(c, client);
+		if (c & (1 << 7) || g_unisize != 0)
+			ultrauni(info->si_pid, c);
+		else
+			writesig(c, client);
 		c = 0;
 		d = 0;
 	}
